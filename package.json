@@ -1,0 +1,63 @@
+{
+  "name": "preact-lego",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Delightfully easy habitats using Preact",
+  "source": "src/index.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.module.js",
+  "unpkg": "./dist/index.umd.js",
+  "scripts": {
+    "build": "microbundle",
+    "dev:lib": "microbundle watch",
+    "dev:example": "cd example && npm run dev",
+    "dev": "run-p dev:*",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mwood23/preact-lego.git"
+  },
+  "keywords": [
+    "preact",
+    "habitat",
+    "shopify"
+  ],
+  "author": "Marcus Wood",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mwood23/preact-lego/issues"
+  },
+  "homepage": "https://github.com/mwood23/preact-lego#readme",
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+      "preact",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "ignorePatterns": [
+      "build/"
+    ]
+  },
+  "devDependencies": {
+    "microbundle": "^0.15.0",
+    "eslint": "^8.15.0",
+    "eslint-config-preact": "^1.3.0",
+    "prettier": "^2.6.2",
+    "jest": "^28.1.0",
+    "preact": "^10.7.2",
+    "npm-run-all": "^4.1.5",
+    "@testing-library/preact": "^2.0.1",
+    "jest-preset-preact": "^4.0.5",
+    "typescript": "^4.6.4"
+  },
+  "peerDependencies": {
+    "preact": "*"
+  },
+  "jest": {
+    "preset": "jest-preset-preact",
+    "setupFiles": [
+      "<rootDir>/tests/__mocks__/setupTests.js"
+    ]
+  }
+}

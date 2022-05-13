@@ -1,0 +1,64 @@
+*.jks
+*.p8
+*.p12
+*.mobileprovision
+*.orig.*
+web-build/
+node_modules
+
+dist
+
+**/public/build
+.netlify
+
+.cache
+.next
+.env
+stats.html
+
+*tar.gz
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/.pnp
+.pnp.js
+
+# testing
+coverage
+
+# misc
+.DS_Store
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log
+ui-debug.log
+
+# Dependencies
+jspm_packages
+
+# Serverless
+.serverless
+
+# Dynamodb
+.dynamodb
+
+# Webpack
+.webpack
+
+test-results
+test-report
+tests-out
+playwright-report
+
+# Local folder
+local
+
+# Misc
+.DS_Store
+*.pem
+Thumbs.db
+
+size-plugin.json
