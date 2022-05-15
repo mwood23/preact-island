@@ -59,6 +59,13 @@ Key differences:
 - All dataset attributes (`data-` on an element) are passed as props
 - There is no `clientSpecified` flag. If you declare a `data-mount-in` prop on a script it will take priority over the `selector` given at `render`.
 
+## Alternatives
+
+- [StencilJS](https://stenciljs.com/): A web components toolchain that feels sort of like React and Angular put together. The JSX core is lifted from Preact's internals. It has a lot of nice features like automatic documentation and other nice to haves since it has its own compiler. It feels tailored towards design system and doesn't have the flexibility of prop injection that Preact Island does. It's also another tool to adopt with it's own patterns. All you have to do with Preact Island is bring your component.
+- [Lit](https://lit.dev/docs/): A web components framework by Google. Does not require a compilation step and weights in around 5Kb (roughly the same as Preact Island + Preact). Doesn't use a virtual dom for diffing and feels like a nice layer on top of web components. Does not support JSX or a React style workflow.
+
+Preact Island does not leverage the shadow dom or custom elements API yet for building full fledged [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components). It may at some point in the future, but the scope of the project is to deliver the best React style API for delivering one of widgets onto any web page under 5kB. 
+
 ## API
 
 ## Credits
