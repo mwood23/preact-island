@@ -21,6 +21,7 @@ Preact Island helps you build these experiences by adding a lightweight layer on
 ## Features
 
 - 🚀 Render by selector, inline, or by a selector given on the executed script
+- ⚛️ Based on Preact, no special compiler or anything needed to render an island
 - 🙏 5 ways to pass in props to your component
 - 🪄 Prop changes sync to all components causing rerenders (not remounts)
 - 👯‍♀️ Create as many instances of your component as you need with a single island
