@@ -1,11 +1,5 @@
-import {
-  widgetDOMHostElements,
-  mount,
-  RootFragment,
-  getExecutedScript,
-  renderIsland,
-} from './lib'
-import { h, render, ComponentType } from 'preact'
+import { getHostElements, mount, RootFragment, renderIsland } from './lib'
+import { render, ComponentType } from 'preact'
 
 export type InitialProps = { [x: string]: any }
 
@@ -84,7 +78,7 @@ export const createIsland = <P extends InitialProps>(
   const island: Island<P> = {
     _rootsToObservers: new WeakMap(),
     _roots: [],
-    _executedScript: getExecutedScript(),
+    _executedScript: document.currentScript,
     // @ts-ignore
     props: {},
     render: ({
@@ -103,7 +97,7 @@ export const createIsland = <P extends InitialProps>(
          * successfully we break early for others.
          */
         if (rendered === true) return
-        const hostElements = widgetDOMHostElements({
+        const hostElements = getHostElements({
           selector,
           inline,
         })

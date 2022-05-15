@@ -3,24 +3,8 @@ import { InitialProps, Island } from './island'
 
 type HostElement = HTMLElement
 
-/**
- * Removes `-` from a string and capitalize the letter after
- * example: data-props-hello-world => dataPropsHelloWorld
- * Used for props passed from host DOM element
- * @param  {String} str string
- * @return {String} Capitalized string
- */
 export const formatProp = (str: string) => {
   return `${str.charAt(0).toLowerCase()}${str.slice(1)}`
-}
-
-/**
- * [getExecutedScript internal widget to provide the currently executed script]
- * @param  {document} document [Browser document object]
- * @return {HTMLElement}     [script Element]
- */
-export const getExecutedScript = () => {
-  return document.currentScript
 }
 
 export const getPropsFromElement = (
@@ -37,7 +21,7 @@ export const getPropsFromElement = (
     // data-prop or data-props works!
     const propName = formatProp(d.split(/(props?)/).pop() || '')
 
-    if (propName !== '') {
+    if (propName) {
       props[propName] = dataset[d]
     }
   }
@@ -47,7 +31,7 @@ export const getPropsFromElement = (
 
 export const isValidPropsScript = (element: Element) => {
   return (
-    element.tagName.toLowerCase() === 'script' &&
+    // element.tagName.toLowerCase() === 'script' &&
     ['text/props', 'application/json'].includes(
       element.getAttribute('type') || '',
     )
@@ -55,11 +39,13 @@ export const isValidPropsScript = (element: Element) => {
 }
 
 export const getInteriorPropsScriptsForElement = (element: HTMLElement) => {
-  return [...element.getElementsByTagName('script')].filter(isValidPropsScript)
+  return Array.from(element.getElementsByTagName('script')).filter(
+    isValidPropsScript,
+  )
 }
 
 export const getPropsScriptsBySelector = (selector: string) => {
-  return [...document.querySelectorAll(selector)].filter(
+  return Array.from(document.querySelectorAll(selector)).filter(
     isValidPropsScript,
     // Checked by filter call
   ) as HTMLOrSVGScriptElement[]
@@ -116,14 +102,15 @@ export const generateHostElementProps = <P extends InitialProps>(
  * Return array of 0 or more elements that will host our widget
  * @return {Array}        Array of matching habitats
  */
-export const widgetDOMHostElements = ({
+export const getHostElements = ({
   selector,
   inline,
 }: {
   selector?: string
   inline: boolean
 }): HostElement[] => {
-  const currentScript = getExecutedScript()
+  const currentScript = document.currentScript
+  const doesExist = currentScript != null
 
   if (inline && currentScript?.parentNode) {
     // @ts-ignore Not sure on this one
@@ -133,11 +120,11 @@ export const widgetDOMHostElements = ({
   // Next, try to get the selector from the current script
   const maybeSelector = currentScript?.dataset.mountIn
   if (maybeSelector) {
-    return [...document.querySelectorAll<HTMLElement>(maybeSelector)]
+    return Array.from(document.querySelectorAll<HTMLElement>(maybeSelector))
   }
 
   if (selector) {
-    return [...document.querySelectorAll<HTMLElement>(selector)]
+    return Array.from(document.querySelectorAll<HTMLElement>(selector))
   }
 
   return []

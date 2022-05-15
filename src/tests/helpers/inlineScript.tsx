@@ -1,7 +1,7 @@
 import { createIsland } from '../../island'
 import {
   mount,
-  widgetDOMHostElements,
+  getHostElements,
   formatProp,
   getExecutedScript,
   getInteriorPropsScriptsForElement,
@@ -38,7 +38,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 
 const mount = ${mount};
-const widgetDOMHostElements = ${widgetDOMHostElements};
+const getHostElements = ${getHostElements};
 const formatProp = ${formatProp};
 const getExecutedScript = ${getExecutedScript};
 const getInteriorPropsScriptsForElement = ${getInteriorPropsScriptsForElement};
@@ -52,7 +52,7 @@ const renderIsland = ${renderIsland};
 
 const _lib = {
   mount: ${mount},
-  widgetDOMHostElements: ${widgetDOMHostElements},
+  getHostElements: ${getHostElements},
   formatProp: ${formatProp},
   getExecutedScript: ${getExecutedScript},
   getInteriorPropsScriptsForElement: ${getInteriorPropsScriptsForElement},

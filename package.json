@@ -5,10 +5,11 @@
   "description": "Delightfully easy habitats using Preact",
   "source": "src/index.ts",
   "main": "./dist/index.cjs",
+  "exports": "./dist/index.modern.js",
   "module": "./dist/index.module.js",
   "unpkg": "./dist/index.umd.js",
   "scripts": {
-    "build": "microbundle",
+    "build": "microbundle --sourcemap false",
     "dev:lib": "microbundle watch",
     "dev:example": "cd example && npm run dev",
     "dev": "run-p dev:*",
