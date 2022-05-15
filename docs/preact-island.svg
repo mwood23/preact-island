@@ -19,8 +19,8 @@
             }
         </style>
         <div class="container">
-            <img class="img-light" src="https://github.com/mwood23/preact-island/blob/master/docs/preact-island-light.gif" />
-            <img class="img-dark" src="https://github.com/mwood23/preact-island/blob/master/docs/preact-island-dark.gif" />
+            <img class="img-light" src="https://res.cloudinary.com/earn-bounty/video/upload/q_auto:good/e_loop/v1652644332/development/2022-05-15_02-14-36_copy_a7ygok.gif" />
+            <img class="img-dark" src="https://res.cloudinary.com/earn-bounty/video/upload/q_auto:eco/e_loop/v1652644336/development/2022-05-15_02-14-36_copy_1_gdm5om.gif" />
         </div>
       </div>
     </foreignObject>
