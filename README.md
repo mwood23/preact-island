@@ -1,6 +1,6 @@
   
-<div>
-  <img src="./docs/preact-island.svg" align="center />
+<div align="center">
+  <img src="./docs/preact-island.svg" align="center" />
 </div>
 <div align="center">
   <h1 align="center">Preact Island</h1>
