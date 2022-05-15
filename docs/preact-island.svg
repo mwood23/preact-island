@@ -6,12 +6,12 @@
                 display: none;
             }
             .img-light {
-                display: block;
+                display: inline-block;
             }
 
             @media (prefers-color-scheme: dark) {
             .img-dark {
-                display: block;
+                display: inline-block;
             }
             .img-light {
                 display: none;
