@@ -110,7 +110,6 @@ export const getHostElements = ({
   inline: boolean
 }): HostElement[] => {
   const currentScript = document.currentScript
-  const doesExist = currentScript != null
 
   if (inline && currentScript?.parentNode) {
     // @ts-ignore Not sure on this one

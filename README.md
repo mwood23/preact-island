@@ -1,4 +1,15 @@
-# preact-lego
+<div align="center">
+  <img src="https://github.com/mwood23/preact-island/blob/master/docs/preact-island.gif?raw=true" height=300px>
+</div>
+
+[![downloads][downloads-badge]][npmcharts]
+[![version][version-badge]][package]
+[![gzip size][gzip-badge]][unpkg-dist]
+[![module formats: umd, cjs, and es][module-formats-badge]][unpkg-dist]
+[![Supports Preact and React][preact-badge]][preact]
+[![MIT License][license-badge]][license]
+
+## Preact Habitat
 
 ## Replace
 
