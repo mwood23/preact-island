@@ -1,0 +1,27 @@
+<svg fill="none" viewBox="0 0 800 400" width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+    <foreignObject width="100%" height="100%">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+        <style>
+            .img-dark {
+                display: none;
+            }
+            .img-light {
+                display: block;
+            }
+
+            @media (prefers-color-scheme: dark) {
+            .img-dark {
+                display: block;
+            }
+            .img-light {
+                display: none;
+            }
+            }
+        </style>
+        <div class="container">
+            <img class="img-light" src="https://github.com/mwood23/preact-island/blob/master/docs/preact-island-light.gif" />
+            <img class="img-dark" src="https://github.com/mwood23/preact-island/blob/master/docs/preact-island-dark.gif" />
+        </div>
+      </div>
+    </foreignObject>
+  </svg>

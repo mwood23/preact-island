@@ -1,8 +1,9 @@
 <div align="center">
+  [![PreactIsland(./docs/preact-island.svg)](./docs/preact-island.svg)
   <img class="img-light" src="https://github.com/mwood23/preact-island/blob/master/docs/preact-island.gif?raw=true" height=350px>
   <h1 align="center">Preact Island</h1>
   <p align="center">A 1.3kB module that helps you ship Preact components to any website. Especially useful for Shopify or CMS websites.</p>
-  
+
   [![downloads][downloads-badge]][npmcharts]
   [![version][version-badge]][package]
   [![Supports Preact and React][preact-badge]][preact]
@@ -45,6 +46,7 @@ TODO
 This library was heavily inspired by [Preact Habitat](https://github.com/zouhir/preact-habitat).
 
 Key differences:
+
 - Components rerender based on prop changes. This can be a `data-prop` attribute change on a host element, inside of a props script tag, or event on the executed script.
 - You can add props to script element itself and they're passed to the component
 - You can add props to a script tag that lives anywhere in the document and sync it up to the component
@@ -73,7 +75,6 @@ Artwork by [vik4graphic](https://lottiefiles.com/vik4graphic)
 - f you use replace, you will not be able to add props to a child script (since it will be replaced)
 
 To add dynamic props to replace you can add a script in the document and pass in `data-props-for` or you can add props inline to the script placed on the page.
-
 
 [version-badge]: https://img.shields.io/npm/v/preact-island.svg?style=flat-square
 [package]: https://www.npmjs.com/package/preact-island

@@ -58,6 +58,6 @@
     "typescript": "^4.6.4"
   },
   "peerDependencies": {
-    "preact": "*"
+    "preact": ">10"
   }
 }
