@@ -1,6 +1,8 @@
 import { ComponentType, h, render } from 'preact'
+import { InitialProps, Island } from './island'
 
 type HostElement = HTMLElement
+
 /**
  * Removes `-` from a string and capitalize the letter after
  * example: data-props-hello-world => dataPropsHelloWorld
@@ -8,10 +10,8 @@ type HostElement = HTMLElement
  * @param  {String} str string
  * @return {String} Capitalized string
  */
-const camelcasize = (str: string) => {
-  return str.replace(/-([a-z])/gi, (all, letter) => {
-    return letter.toUpperCase()
-  })
+export const formatProp = (str: string) => {
+  return `${str.charAt(0).toLowerCase()}${str.slice(1)}`
 }
 
 /**
@@ -19,11 +19,13 @@ const camelcasize = (str: string) => {
  * @param  {document} document [Browser document object]
  * @return {HTMLElement}     [script Element]
  */
-const getExecutedScript = () => {
+export const getExecutedScript = () => {
   return document.currentScript
 }
 
-const getPropsFromElement = (element: HostElement | HTMLOrSVGScriptElement) => {
+export const getPropsFromElement = (
+  element: HostElement | HTMLOrSVGScriptElement,
+) => {
   // @ts-ignore
   const { dataset } = element
 
@@ -34,39 +36,47 @@ const getPropsFromElement = (element: HostElement | HTMLOrSVGScriptElement) => {
     if (dataset.hasOwnProperty(d) === false) return
 
     // data-prop or data-props works!
-    let propName = d.split(/(data-props?-)/).pop() || ''
-    propName = camelcasize(propName)
+    const propName = formatProp(d.split(/(props?)/).pop() || '')
 
-    if (d !== propName) {
+    if (propName !== '') {
       props[propName] = dataset[d]
     }
-
-    return props
   }
+
+  return props
 }
 
-const getInteriorScriptProps = (element: HTMLElement) => {
-  let interiorScriptProps: any = {}
-  ;[].forEach.call(
-    element.getElementsByTagName('script'),
-    (scrp: HTMLScriptElement) => {
-      if (
-        ['text/props', 'application/json'].includes(
-          scrp.getAttribute('type') ?? '',
-        )
-      ) {
-        // Swallow any potential errors
-        try {
-          interiorScriptProps = {
-            ...interiorScriptProps,
-            ...JSON.parse(scrp.innerHTML),
-          }
-        } catch (e: any) {
-          console.error(e)
-        }
-      }
-    },
+export const isValidPropsScript = (element: Element) => {
+  return (
+    element.tagName.toLowerCase() === 'script' &&
+    ['text/props', 'application/json'].includes(
+      element.getAttribute('type') || '',
+    )
   )
+}
+
+export const getInteriorPropsScriptsForElement = (element: HTMLElement) => {
+  return [...element.getElementsByTagName('script')].filter(isValidPropsScript)
+}
+
+export const getPropsScriptsBySelector = (selector: string) => {
+  return [...document.querySelectorAll(selector)].filter(
+    isValidPropsScript,
+    // Checked by filter call
+  ) as HTMLOrSVGScriptElement[]
+}
+
+export const getPropsFromScripts = (scripts: HTMLOrSVGScriptElement[]) => {
+  let interiorScriptProps: any = {}
+  scripts.forEach((script) => {
+    // Swallow any potential errors so we don't throw on someone else's page
+    try {
+      interiorScriptProps = {
+        ...interiorScriptProps,
+        ...JSON.parse(script.innerHTML),
+      }
+    } catch (e: any) {}
+  })
   return interiorScriptProps
 }
 
@@ -75,22 +85,30 @@ const getInteriorScriptProps = (element: HTMLElement) => {
  * @param  {Element} tag The host element
  * @return {Object}  props object to be passed to the component
  */
-const generateHostElementProps = <P extends {}>(
+export const generateHostElementProps = <P extends InitialProps>(
+  island: Island<P>,
   element: HostElement,
-  defaultProps = {},
+  initialProps = {},
+  propsSelector: string | undefined | null,
 ): P => {
   const elementProps = getPropsFromElement(element)
 
-  const currentScript = getExecutedScript()
-  const currentScriptProps = currentScript
-    ? getPropsFromElement(currentScript)
+  const currentScriptProps = island._executedScript
+    ? getPropsFromElement(island._executedScript)
     : {}
-  const interiorScriptProps = getInteriorScriptProps(element)
+  const interiorScriptProps = getPropsFromScripts(
+    getInteriorPropsScriptsForElement(element),
+  )
+
+  const propsSelectorProps = propsSelector
+    ? getPropsFromScripts(getPropsScriptsBySelector(propsSelector))
+    : {}
 
   return {
-    ...defaultProps,
+    ...initialProps,
     ...elementProps,
     ...currentScriptProps,
+    ...propsSelectorProps,
     ...interiorScriptProps,
   }
 }
@@ -114,7 +132,7 @@ const getHabitatSelectorFromClient = (currentScript: any) => {
  * Return array of 0 or more elements that will host our widget
  * @return {Array}        Array of matching habitats
  */
-const widgetDOMHostElements = ({ selector }: { selector?: string }) => {
+export const widgetDOMHostElements = ({ selector }: { selector?: string }) => {
   let hostNodes: HostElement[] = []
   let currentScript = getExecutedScript()
 
@@ -138,11 +156,15 @@ const widgetDOMHostElements = ({ selector }: { selector?: string }) => {
  *
  * This creates a "Persistent Fragment" (a fake DOM element) containing one or more
  * DOM nodes, which can then be passed as the `parent` argument to Preact's `render()` method.
+ *
+ * Lifted from: https://gist.github.com/developit/f4c67a2ede71dc2fab7f357f39cff28c
  */
+export type RootFragment = any
+
 export function createRootFragment(
   parent: HTMLElement,
   replaceNode: HTMLElement | HTMLElement[],
-): any {
+): RootFragment {
   replaceNode = ([] as HTMLElement[]).concat(replaceNode)
   var s = replaceNode[replaceNode.length - 1].nextSibling
   function insert(c: HTMLElement, r: HTMLElement) {
@@ -163,75 +185,116 @@ export function createRootFragment(
   })
 }
 
-const watchForPropChanges = <P extends {}>({
+export const watchForPropChanges = <P extends InitialProps>({
+  island,
   hostElement,
-  defaultProps,
+  initialProps,
   onNewProps,
+  propsSelector,
 }: {
+  island: Island<P>
   hostElement: HTMLElement
-  defaultProps: any
+  initialProps: any
   onNewProps: (props: P) => void
+  propsSelector: string | undefined | null
 }) => {
   const observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
-      onNewProps(generateHostElementProps(hostElement, defaultProps))
+      onNewProps(
+        generateHostElementProps(
+          island,
+          hostElement,
+          initialProps,
+          propsSelector,
+        ),
+      )
     })
   })
 
   const config = { attributes: true, childList: true, characterData: true }
 
-  const executedScript = getExecutedScript()
-  if (executedScript) {
-    observer.observe(executedScript, config)
+  if (island._executedScript) {
+    observer.observe(island._executedScript, config)
+  }
+
+  getInteriorPropsScriptsForElement(hostElement).forEach((script) => {
+    observer.observe(script, config)
+  })
+
+  if (propsSelector) {
+    getPropsScriptsBySelector(propsSelector).forEach((script) => {
+      observer.observe(script, config)
+    })
   }
 
   observer.observe(hostElement, config)
+
+  return observer
 }
 
 /**
  * preact render function that will be queued if the DOM is not ready
  * and executed immediately if DOM is ready
  */
-const preactRender = <P extends {}>({
+
+export const preactRender = <P extends InitialProps>({
+  island,
   widget,
   hostElements,
   cleanTarget,
   replaceTarget,
-  defaultProps,
+  initialProps,
+  propsSelector,
 }: {
+  island: Island<P>
   widget: ComponentType<P>
   hostElements: Array<HostElement>
   cleanTarget: boolean
   replaceTarget: boolean
-  defaultProps: P
+  initialProps: P
+  propsSelector?: string
 }) => {
+  const rootFragments: any = []
+
   hostElements.forEach((hostElement) => {
-    const props = generateHostElementProps<P>(hostElement, defaultProps)
+    const props = generateHostElementProps<P>(
+      island,
+      hostElement,
+      initialProps,
+      propsSelector,
+    )
     if (cleanTarget) {
-      hostElement.innerHTML = ''
+      hostElement.replaceChildren()
     }
 
-    const renderNode = document.createElement('div')
-    hostElement.appendChild(renderNode)
-    const rootFrag = createRootFragment(hostElement, renderNode)
+    let rootFragment: any
+    if (replaceTarget) {
+      rootFragment = createRootFragment(
+        hostElement.parentElement || document.body,
+        hostElement,
+      )
+    } else {
+      const renderNode = document.createElement('div')
+      hostElement.appendChild(renderNode)
+      rootFragment = createRootFragment(hostElement, renderNode)
+    }
 
-    render(h(widget, props), rootFrag)
+    rootFragments.push(rootFragment)
 
-    watchForPropChanges<P>({
+    render(h(widget, props), rootFragment)
+
+    const observer = watchForPropChanges<P>({
+      island,
       hostElement,
-      defaultProps,
+      initialProps,
       onNewProps: (newProps) => {
-        render(h(widget, newProps), rootFrag)
+        render(h(widget, newProps), rootFragment)
       },
+      propsSelector,
     })
-  })
-}
 
-export {
-  generateHostElementProps,
-  widgetDOMHostElements,
-  getExecutedScript,
-  camelcasize,
-  preactRender,
-  getHabitatSelectorFromClient,
+    island._rootsToObservers.set(rootFragment, observer)
+  })
+
+  return { rootFragments }
 }

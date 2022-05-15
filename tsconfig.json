@@ -14,9 +14,10 @@
     "isolatedModules": true,
     "declaration": true,
     "preserveWatchOutput": true,
-    "jsx": "react-jsx",
-    "jsxFactory": "",
+    "jsx": "react",
+    "jsxFactory": "h",
     "jsxFragmentFactory": ""
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["**/tests/**"]
 }
