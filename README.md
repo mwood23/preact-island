@@ -1,6 +1,8 @@
+  
+<div>
+  <img src="./docs/preact-island.svg" align="center />
+</div>
 <div align="center">
-  [![PreactIsland(./docs/preact-island.svg)](./docs/preact-island.svg)
-  <img class="img-light" src="https://github.com/mwood23/preact-island/blob/master/docs/preact-island.gif?raw=true" height=350px>
   <h1 align="center">Preact Island</h1>
   <p align="center">A 1.3kB module that helps you ship Preact components to any website. Especially useful for Shopify or CMS websites.</p>
 
