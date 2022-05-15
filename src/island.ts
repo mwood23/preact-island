@@ -1,8 +1,9 @@
 import {
   widgetDOMHostElements,
-  preactRender,
+  mount,
   RootFragment,
   getExecutedScript,
+  renderIsland,
 } from './lib'
 import { h, render, ComponentType } from 'preact'
 
@@ -29,7 +30,8 @@ export type Island<P extends InitialProps> = {
    */
   render: (props: {
     /**
-     * A query selector target to create the widget.
+     * A query selector target to create the widget. This is ignore if inline is passed or if a data-mount-in attribute
+     * is appended onto the executed script.
      */
     selector?: string
     /**
@@ -37,13 +39,20 @@ export type Island<P extends InitialProps> = {
      *
      * @default false
      */
-    cleanTarget?: boolean
+    clean?: boolean
     /**
      * If true, replaces the contents of the selector with the component given.
      *
      * @default false
      */
-    replaceTarget?: boolean
+    replace?: boolean
+
+    /**
+     * Appends the widget to the parent of the DOM node where the script is placed.
+     *
+     * @default false
+     */
+    inline?: boolean
     /**
      * Initial props to pass to the component.
      */
@@ -54,6 +63,11 @@ export type Island<P extends InitialProps> = {
      */
     propsSelector?: string
   }) => void
+
+  /**
+   * Contains the current props used to render the island.
+   */
+  props: P
   /**
    * Triggers a rerenders of the island with the new props given.
    */
@@ -71,10 +85,13 @@ export const createIsland = <P extends InitialProps>(
     _rootsToObservers: new WeakMap(),
     _roots: [],
     _executedScript: getExecutedScript(),
+    // @ts-ignore
+    props: {},
     render: ({
       selector,
-      cleanTarget = false,
-      replaceTarget = false,
+      clean = false,
+      replace = false,
+      inline = false,
       initialProps = {},
       propsSelector,
     }) => {
@@ -88,17 +105,18 @@ export const createIsland = <P extends InitialProps>(
         if (rendered === true) return
         const hostElements = widgetDOMHostElements({
           selector,
+          inline,
         })
 
         // Do nothing if no host elements returned
         if (hostElements.length === 0) return
 
-        const { rootFragments } = preactRender<P>({
+        const { rootFragments } = mount<P>({
           island,
           widget,
-          cleanTarget,
+          clean,
           hostElements,
-          replaceTarget,
+          replace,
           // @ts-ignore Not sure how to fix this error
           initialProps,
           propsSelector,
@@ -114,7 +132,12 @@ export const createIsland = <P extends InitialProps>(
     },
     rerender: (newProps) => {
       island._roots.forEach((rootFragment) => {
-        render(h(widget, newProps), rootFragment)
+        renderIsland({
+          island,
+          widget,
+          rootFragment,
+          props: { ...island.props, ...newProps },
+        })
       })
     },
     destroy: () => {

@@ -1,6 +1,6 @@
 import { createIsland } from '../../island'
 import {
-  preactRender,
+  mount,
   widgetDOMHostElements,
   formatProp,
   getExecutedScript,
@@ -11,6 +11,7 @@ import {
   createRootFragment,
   watchForPropChanges,
   isValidPropsScript,
+  renderIsland,
 } from '../../lib'
 import { h, FunctionComponent } from 'preact'
 
@@ -19,7 +20,11 @@ import { h, FunctionComponent } from 'preact'
  * the hood for Jest to run the things. I'm not sure a better way to test this unless it's importing the dist files but then that requires a build step every time
  * we run tests.
  */
-export const InlineScript: FunctionComponent<any> = ({ widget, ...rest }) => {
+export const InlineScript: FunctionComponent<{
+  widget: any
+  renderCode: string
+  id?: string
+}> = ({ widget, renderCode, ...rest }) => {
   return (
     <script
       {...rest}
@@ -32,7 +37,7 @@ const _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 
-const preactRender = ${preactRender};
+const mount = ${mount};
 const widgetDOMHostElements = ${widgetDOMHostElements};
 const formatProp = ${formatProp};
 const getExecutedScript = ${getExecutedScript};
@@ -43,9 +48,10 @@ const getPropsFromElement = ${getPropsFromElement};
 const createRootFragment = ${createRootFragment};
 const watchForPropChanges = ${watchForPropChanges};
 const isValidPropsScript = ${isValidPropsScript};
+const renderIsland = ${renderIsland};
 
 const _lib = {
-  preactRender: ${preactRender},
+  mount: ${mount},
   widgetDOMHostElements: ${widgetDOMHostElements},
   formatProp: ${formatProp},
   getExecutedScript: ${getExecutedScript},
@@ -55,14 +61,13 @@ const _lib = {
   getPropsFromElement: ${getPropsFromElement},
   createRootFragment: ${createRootFragment},
   watchForPropChanges: ${watchForPropChanges},
-  isValidPropsScript: ${isValidPropsScript}
+  isValidPropsScript: ${isValidPropsScript},
+  renderIsland: ${renderIsland}
 }
 
 const createIsland = ${createIsland}
 const island = createIsland(${widget})
-island.render({
-selector: '[data-widget-host="island"]',
-})
+${renderCode}
 })()
 `,
       }}

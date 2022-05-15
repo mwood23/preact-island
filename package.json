@@ -58,17 +58,5 @@
   },
   "peerDependencies": {
     "preact": "*"
-  },
-  "jest": {
-    "preset": "jest-preset-preact",
-    "setupFilesAfterEnv": [
-      "<rootDir>/config/setupTests.js"
-    ],
-    "testEnvironment": "jsdom",
-    "globals": {
-      "ts-jest": {
-        "isolatedModules": true
-      }
-    }
   }
 }

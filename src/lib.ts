@@ -26,7 +26,6 @@ export const getExecutedScript = () => {
 export const getPropsFromElement = (
   element: HostElement | HTMLOrSVGScriptElement,
 ) => {
-  // @ts-ignore
   const { dataset } = element
 
   const props: { [x: string]: any } = {}
@@ -113,42 +112,35 @@ export const generateHostElementProps = <P extends InitialProps>(
   }
 }
 
-const getHabitatSelectorFromClient = (currentScript: any) => {
-  let scriptTagAttrs = currentScript.attributes
-  let selector = null
-  // check for another props attached to the tag
-  Object.keys(scriptTagAttrs).forEach((key) => {
-    if (scriptTagAttrs.hasOwnProperty(key)) {
-      const dataAttrName = scriptTagAttrs[key].name
-      if (dataAttrName === 'data-mount-in') {
-        selector = scriptTagAttrs[key].nodeValue
-      }
-    }
-  })
-  return selector
-}
-
 /**
  * Return array of 0 or more elements that will host our widget
  * @return {Array}        Array of matching habitats
  */
-export const widgetDOMHostElements = ({ selector }: { selector?: string }) => {
-  let hostNodes: HostElement[] = []
-  let currentScript = getExecutedScript()
+export const widgetDOMHostElements = ({
+  selector,
+  inline,
+}: {
+  selector?: string
+  inline: boolean
+}): HostElement[] => {
+  const currentScript = getExecutedScript()
 
-  // Assume inline if no selector is present
-  if (selector == null) {
-    if (currentScript?.parentNode) {
-      // @ts-ignore
-      hostNodes.push(currentScript.parentNode)
-    }
-    return hostNodes
+  if (inline && currentScript?.parentNode) {
+    // @ts-ignore Not sure on this one
+    return [currentScript.parentNode]
   }
 
-  ;[].forEach.call(document.querySelectorAll(selector), (queriedTag) => {
-    hostNodes.push(queriedTag)
-  })
-  return hostNodes
+  // Next, try to get the selector from the current script
+  const maybeSelector = currentScript?.dataset.mountIn
+  if (maybeSelector) {
+    return [...document.querySelectorAll<HTMLElement>(maybeSelector)]
+  }
+
+  if (selector) {
+    return [...document.querySelectorAll<HTMLElement>(selector)]
+  }
+
+  return []
 }
 
 /**
@@ -193,13 +185,13 @@ export const watchForPropChanges = <P extends InitialProps>({
   propsSelector,
 }: {
   island: Island<P>
-  hostElement: HTMLElement
+  hostElement: HostElement
   initialProps: any
   onNewProps: (props: P) => void
   propsSelector: string | undefined | null
 }) => {
   const observer = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
+    mutations.forEach(function () {
       onNewProps(
         generateHostElementProps(
           island,
@@ -232,25 +224,35 @@ export const watchForPropChanges = <P extends InitialProps>({
   return observer
 }
 
-/**
- * preact render function that will be queued if the DOM is not ready
- * and executed immediately if DOM is ready
- */
+export const renderIsland = <P extends InitialProps>({
+  island,
+  widget,
+  rootFragment,
+  props,
+}: {
+  island: Island<P>
+  widget: ComponentType<P>
+  rootFragment: RootFragment
+  props: P
+}) => {
+  island.props = props
+  render(h(widget, props), rootFragment)
+}
 
-export const preactRender = <P extends InitialProps>({
+export const mount = <P extends InitialProps>({
   island,
   widget,
   hostElements,
-  cleanTarget,
-  replaceTarget,
+  clean,
+  replace,
   initialProps,
   propsSelector,
 }: {
   island: Island<P>
   widget: ComponentType<P>
   hostElements: Array<HostElement>
-  cleanTarget: boolean
-  replaceTarget: boolean
+  clean: boolean
+  replace: boolean
   initialProps: P
   propsSelector?: string
 }) => {
@@ -263,12 +265,12 @@ export const preactRender = <P extends InitialProps>({
       initialProps,
       propsSelector,
     )
-    if (cleanTarget) {
+    if (clean) {
       hostElement.replaceChildren()
     }
 
     let rootFragment: any
-    if (replaceTarget) {
+    if (replace) {
       rootFragment = createRootFragment(
         hostElement.parentElement || document.body,
         hostElement,
@@ -281,14 +283,14 @@ export const preactRender = <P extends InitialProps>({
 
     rootFragments.push(rootFragment)
 
-    render(h(widget, props), rootFragment)
+    renderIsland({ island, widget, rootFragment, props })
 
     const observer = watchForPropChanges<P>({
       island,
       hostElement,
       initialProps,
       onNewProps: (newProps) => {
-        render(h(widget, newProps), rootFragment)
+        renderIsland({ island, widget, rootFragment, props: newProps })
       },
       propsSelector,
     })

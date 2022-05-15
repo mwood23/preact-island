@@ -1,6 +1,7 @@
-import { createIsland } from '../island'
 import { h } from 'preact'
-import { render, waitFor } from '@testing-library/preact'
+import { createIsland } from '../island'
+import { render, waitFor, within } from '@testing-library/preact'
+import { InlineScript } from './helpers/inlineScript'
 
 const Widget = (props: any) => {
   return <div data-testid="widget">{JSON.stringify(props)}</div>
@@ -30,6 +31,64 @@ it('should render at the given selector', async () => {
         </div>
       </div>
     `),
+  )
+})
+
+it('should render inline if prop is passed and take highest priority', async () => {
+  const r = render(
+    <div data-testid="parent-node">
+      <InlineScript
+        widget={Widget}
+        renderCode={`
+island.render({
+  inline: true
+})
+  `}
+      />
+    </div>,
+  )
+
+  await waitFor(() =>
+    expect(r.getByTestId('parent-node').lastChild).toMatchInlineSnapshot(`
+      <div
+        data-testid="widget"
+      >
+        {"testid":"parent-node"}
+      </div>
+    `),
+  )
+})
+
+it('should render using the data-mount-in prop and take priority over a selector if passed', async () => {
+  const r = render(
+    <div data-testid="parent-node">
+      <div data-testid="selector" data-widget-host="selector"></div>
+      <div
+        data-testid="inlineScriptMountIn"
+        data-widget-host="inlineScriptMountIn"
+      ></div>
+      <InlineScript
+        widget={Widget}
+        data-mount-in={`[data-widget-host="inlineScriptMountIn"]`}
+        renderCode={`
+island.render({
+  selector: '[data-widget-host="island"]'
+})
+  `}
+      />
+    </div>,
+  )
+
+  await waitFor(() =>
+    expect(
+      within(r.getByTestId('selector')).queryByTestId('widget'),
+    ).not.toBeInTheDocument(),
+  )
+
+  await waitFor(() =>
+    expect(
+      within(r.getByTestId('inlineScriptMountIn')).queryByTestId('widget'),
+    ).toBeInTheDocument(),
   )
 })
 
@@ -150,7 +209,7 @@ it('should replace the node at given selector if prop is given', async () => {
   const island = createIsland(Widget)
   island.render({
     selector: '[data-widget-host="island"]',
-    replaceTarget: true,
+    replace: true,
   })
 
   await waitFor(() =>
@@ -203,13 +262,13 @@ it('should destroy mounted islands when destroy called', async () => {
   )
 })
 
-it('should destroy mounted islands when destroy called mode', async () => {
+it('should destroy mounted islands when destroy called with replace: true', async () => {
   const r = render(<div data-widget-host="island"></div>)
 
   const island = createIsland(Widget)
   island.render({
     selector: '[data-widget-host="island"]',
-    replaceTarget: true,
+    replace: true,
   })
 
   await waitFor(() =>

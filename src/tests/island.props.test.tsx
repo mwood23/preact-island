@@ -1,5 +1,5 @@
-import { createIsland } from '../island'
 import { h } from 'preact'
+import { createIsland } from '../island'
 import { useState } from 'preact/hooks'
 import { render, waitFor } from '@testing-library/preact'
 import userEvent from '@testing-library/user-event'
@@ -56,6 +56,47 @@ it('should render at the given selector and trigger a rerender (not remount) whe
 
   const islandHost = r.getByTestId('island-host')
   islandHost.dataset.propTest = 'apples'
+
+  // By asserting that toggled is still in the document it shows we didn't accidentally remount
+  // the component on prop changes
+  await waitFor(() => expect(r.getByTestId('toggled')).toBeInTheDocument())
+  await waitFor(() =>
+    expect(r.getByTestId('widgetProps').textContent).toEqual(
+      '{"widgetHost":"island","testid":"island-host","test":"apples"}',
+    ),
+  )
+})
+
+it('should render at the given selector and trigger a rerender (not remount) when rerender is called with new props', async () => {
+  const user = userEvent.setup()
+  const r = render(
+    <div
+      data-widget-host="island"
+      data-testid="island-host"
+      data-prop-test="bananas"
+    ></div>,
+  )
+
+  const island = createIsland(Widget)
+  island.render({
+    selector: '[data-widget-host="island"]',
+  })
+
+  await waitFor(() =>
+    expect(r.getByTestId('widgetProps').textContent).toEqual(
+      '{"widgetHost":"island","testid":"island-host","test":"bananas"}',
+    ),
+  )
+
+  /**
+   * We set some local state to the rendered widget to make sure when we update the props that the localized state
+   * continues to exist!
+   */
+  const buttonToggleNode = r.getByTestId('toggleButton')
+  user.click(buttonToggleNode)
+  await waitFor(() => expect(r.getByTestId('toggled')).toBeInTheDocument())
+
+  island.rerender({ test: 'apples' })
 
   // By asserting that toggled is still in the document it shows we didn't accidentally remount
   // the component on prop changes
@@ -165,6 +206,11 @@ it('should render at the given selector and trigger a rerender (not remount) whe
       <InlineScript
         widget={Widget}
         data-prop-test="bananas"
+        renderCode={`
+island.render({
+  selector: '[data-widget-host="island"]',
+  })
+        `}
         id="inline-script"
       />
     </div>,
