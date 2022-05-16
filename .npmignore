@@ -1,0 +1,9 @@
+!dist
+example/
+coverage/
+docs/
+jest.config.js
+tsconfig.json
+config/
+.editorconfig
+.prettierrc

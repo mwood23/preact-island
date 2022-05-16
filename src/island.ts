@@ -104,7 +104,7 @@ export type Island<P extends InitialProps> = {
     /**
      * Initial props to pass to the component. These props do not cause updates to the island if changed. Use `createIsland().rerender` instead.
      */
-    initialProps?: P
+    initialProps?: Partial<P>
     /**
      * A valid selector to a script tag located in the HTML document with a type of either `text/props` or `application/json`
      * containing props to pass into the component. If there are multiple scripts found with the selector, all props are merged with

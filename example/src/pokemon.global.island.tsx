@@ -7,5 +7,5 @@ injectCSS(style)
 
 const island = createIsland(Pokemon)
 
-// @ts-ignore
+// @ts-expect-error - We're mutating the window to add this
 window._pokemon = island

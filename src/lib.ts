@@ -145,7 +145,7 @@ export function createRootFragment(
     parent.insertBefore(c, r || s)
   }
   // Mutating the parent to add a preact property
-  // @ts-ignore
+  // @ts-expect-error We're mutating the parent to add these properties for Preact
   return (parent.__k = {
     nodeType: 1,
     parentNode: parent,
