@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "preact watch --template src/template.html --no-sw --port 3535",
     "build": "npm run build:static && npm run build:islands",
-    "build:islands": "microbundle src/*.island.tsx build --no-sourcemap --output dist/islands --external none --css inline --tsconfig tsconfig.json",
+    "build:islands": "NODE_OPTIONS=--max-old-space-size=8192 microbundle src/*.island.tsx build --no-sourcemap --output dist/islands --external none --css inline --tsconfig tsconfig.json",
     "build:static": "NODE_ENV=production preact build --template src/template.html --no-sw --prerender=false --esm=false --dest=dist"
   },
   "files": [
