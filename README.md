@@ -2,8 +2,10 @@
   <img src="./docs/preact-island.svg" align="center" />
 </div>
 <div align="center">
-  <h1 align="center">Preact Island</h1>
-  <p align="center">A 1.3kB module that helps you ship Preact components to any website. Especially useful for Shopify or CMS websites.</p>
+  <h1 align="center">🏝 Preact Island</h1>
+  <p align="center">
+    A 1.3kB module that helps you ship your own slice of paradise to any website. Especially useful for Shopify apps or CMS websites.
+  </p>
 
 [![downloads][downloads-badge]][npmcharts]
 [![version][version-badge]][package]
@@ -12,7 +14,7 @@
 
 </div>
 
-Sometimes you need to embed a component onto someone else's website. This could be an Shopify widget, email sign up form, CMS comment list, social media share icon, etc. Creating these experiences are tedious and difficult because you aren't in control of the website your code will be executed on.
+Sometimes you need to embed a component onto someone else's website. This could be a Shopify widget, email sign up form, CMS comment list, social media share icon, etc. Creating these experiences are tedious and difficult because you aren't in control of the website your code will be executed on.
 
 Preact Island helps you build these experiences by adding a lightweight layer on top of Preact. For <5kB, you get a React style workflow (with hooks!), and a framework for rendering your widget with reactive props.
 
@@ -21,13 +23,14 @@ Preact Island helps you build these experiences by adding a lightweight layer on
 - 🚀 Render by selector, inline, or by a specific attribute given on the executed script
 - ⚛️ Based on Preact, no special compiler or anything needed to render an island
 - 🙏 5 ways to pass in props to your component
-- 🪄 All components are reactive to prop changes (not remounts)
+- 🪄 All components are reactive to prop changes causing rerenders (not remounts)
 - 👯‍♀️ Create as many instances of your component as you need with a single island
 - 🧼 Does not mutate the `window`. Use as many islands as you'd like on one page!
 - 🐣 Less than 1.3kB
 - ☠️ Supports replacing the target selector
 - 🏔 React friendly with `preact-compat`
 - 🔧 Manually trigger rerenders with props
+- 🐙 Fully tested with Preact testing library
 - 👔 Fully typed with TypeScript
 
 ## Examples
@@ -36,12 +39,12 @@ Preact Island helps you build these experiences by adding a lightweight layer on
 - [Reactive props](https://codesandbox.io/s/reactive-prop-updates-uqvof7)
 - [Multiple islands](https://codesandbox.io/s/multiple-islands-8xvjqw)
 - [Props script](https://codesandbox.io/s/props-selector-70ks1g)
-- [Replace Selector](https://codesandbox.io/s/replace-selector-z2rogw)
+- [Replace selector](https://codesandbox.io/s/replace-selector-z2rogw)
 - [Multiple host elements](https://codesandbox.io/s/multiple-host-elements-q6ot5q)
 - [Clean host element](https://codesandbox.io/s/clean-host-element-i35nlt)
 - [Global island](https://codesandbox.io/s/global-island-zqco9p)
 - [Inline script](https://codesandbox.io/s/inline-script-1qm5q8)
-- [Current script props](https://codesandbox.io/s/preact-island-element-placement-current-script-props-0dwlyo)
+- [Executed script props](https://codesandbox.io/s/preact-island-element-placement-current-script-props-0dwlyo)
 - [Interior script props](https://codesandbox.io/s/interior-script-props-z5rcxg)
 - [Mount In script attribute](https://codesandbox.io/s/mount-in-property-z5rcxg)
 
@@ -71,7 +74,7 @@ island.render({
 
 ### createIsland
 
-Creates a new island instance with a passed in component. Returns a bag of props/methods to working with your island.
+Creates a new island instance with a passed in component. Returns a bag of props/methods to work with your island.
 
 ```tsx
 import { createIsland } from 'preact-island'
@@ -220,7 +223,7 @@ You can override the `selector` given to render by passing `data-mount-in` to th
 <h2>Special mount</h2>
 <!-- This takes priority over the other placement -->
 <!-- Props are scoped to placement so that's why -->
-<!-- Venosaur doesn't appear -->
+<!-- Venosaur (pokemon number 3) doesn't appear -->
 <div data-island="mount-here-actually"></div>
 
 <script
@@ -240,11 +243,11 @@ Props are merged in the following order (from lowest to highest specificity):
 
 1. Initial props
 2. Element props
-3. Current script props
+3. Executed script props
 4. Props selector props
 5. Interior script props
 
-## Data Props
+### Data Props
 
 All props located on an HTML element use `data-`. You can name them any of the following ways:
 
@@ -300,7 +303,7 @@ Props can be placed on host elements and passed to your component. These props a
 ></script>
 ```
 
-### Current Script Props
+### Executed Script Props
 
 Props can be placed on the script tag that's evaluated to the create your island. These props are reactive and will cause rerenders on changes.
 
@@ -366,7 +369,7 @@ multiple interior script props are found, all props are merged with the last scr
 
 ## Adding Styles
 
-You can add styles to your island just like any other component. If you're island will be running on someone else's website be mindful of the global CSS scope! Preact Island does not render into the shadow dom (yet) so your styles will impact the entire page. Prefix all of your classes with a name `fancy-island__` or use CSS modules to make sure those styles don't leak. Do not use element selectors like `p` or `h2`.
+You can add styles to your island just like any other component. If you're island will be running on someone else's website be mindful of the global CSS scope! Preact Island does not render into the shadow dom (yet) so your styles will impact the entire page. Prefix all of your classes with a name `island__` or use CSS modules to make sure those styles don't leak. Do not use element selectors like `p` or `h2`.
 
 ### Including Styles
 
@@ -376,21 +379,41 @@ Preact Island takes no opinions on how CSS is included for your islands. There a
 
 This is what the `/example` islands do.
 
+```tsx
+import { createIsland } from '../../dist/index.module'
+import { h } from 'preact'
+import style from './email-subscribe.island.css'
+
+document.head.insertAdjacentHTML('beforeend', `<style>${style}</style>`)
+
+const Widget = () => {
+  return (
+    <div className="email__container">
+      <p className="email__title">Join our newsletter</p>
+      {/* ... */}
+    </div>
+  )
+}
+
+const island = createIsland(Widget)
+island.render({
+  selector: '[data-island="email-subscribe"]',
+})
+```
+
 ```html
-<!-- Start island -->
 <script
   src="https://your-domain/snippets/fancy-widget.island.umd.js"
   async
 ></script>
-<!-- End island -->
 ```
 
-Pros:
+**Pros:**
 
 - The consumer of the script doesn't need to include an external stylesheet
 - There's only one request for rendering the entire widget
 
-Con:
+**Cons:**
 
 - Bloats the bundle
 - The CSS file itself won't be able to be cached
@@ -410,12 +433,12 @@ Con:
 <!-- End island -->
 ```
 
-Pros:
+**Pros:**
 
 - The CSS can be cached in the browser
 - Doesn't bloat the JS bundle
 
-Cons:
+**Cons:**
 
 - Unless your script creates an element to automatically request the stylesheet the consumer of your script will need to add two things not one
 
@@ -423,7 +446,7 @@ Cons:
 
 It's not recommending to use CSS libraries when developing islands since they're meant to be small and ran everywhere. Some libraries come with opinionated CSS resets and other global CSS styles that could break the consuming website of your island. They are also going to be large.
 
-If you need a CSS library, use something that has a just in time compilation step like Tailwind to minimize the excess CSS.
+If you need a CSS library, use something that has a just in time compilation step like [Tailwind](https://tailwindcss.com/docs/installation) to minimize the excess CSS.
 
 ## Building Your Islands
 
@@ -439,7 +462,9 @@ You can host your files on anywhere you would typically host websites. Vercel, C
 
 ## The Callsite for Your Island
 
-When you are consuming the bundled snippet it's important not to blocking rendering on a consuming page. When a browser loads a webpage and sees a `script` tag it executes that script immediately blocking render. Islands should be independent of the consuming page so it is safe to use the `async` property. See [async vs defer](https://javascript.info/script-async-defer) for more information.
+When you are consuming the bundled snippet it's important not to block rendering on a consuming page. When a browser loads a webpage and sees a `script` tag it executes that script immediately blocking render. Islands should be independent of the consuming page so it is safe to use the `async` property. See [async vs defer](https://javascript.info/script-async-defer) for more information.
+
+> The only exception to this is if you are putting the island on the window and want to run a script after it. Check out [global island](https://codesandbox.io/s/global-island-zqco9p) for an example.
 
 Do this:
 

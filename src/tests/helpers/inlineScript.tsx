@@ -3,7 +3,6 @@ import {
   mount,
   getHostElements,
   formatProp,
-  getExecutedScript,
   getInteriorPropsScriptsForElement,
   getPropsFromScripts,
   generateHostElementProps,
@@ -40,7 +39,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 const mount = ${mount};
 const getHostElements = ${getHostElements};
 const formatProp = ${formatProp};
-const getExecutedScript = ${getExecutedScript};
 const getInteriorPropsScriptsForElement = ${getInteriorPropsScriptsForElement};
 const getPropsFromScripts = ${getPropsFromScripts};
 const generateHostElementProps = ${generateHostElementProps};
@@ -54,7 +52,6 @@ const _lib = {
   mount: ${mount},
   getHostElements: ${getHostElements},
   formatProp: ${formatProp},
-  getExecutedScript: ${getExecutedScript},
   getInteriorPropsScriptsForElement: ${getInteriorPropsScriptsForElement},
   getPropsFromScripts: ${getPropsFromScripts},
   generateHostElementProps: ${generateHostElementProps},

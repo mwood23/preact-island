@@ -2,7 +2,7 @@
   "name": "preact-island",
   "version": "0.1.0",
   "type": "module",
-  "description": "Delightfully easy widgets that run anywhere using Preact",
+  "description": "🏝 Create your own slice of paradise on any website.",
   "source": "src/index.ts",
   "main": "./dist/index.cjs",
   "exports": "./dist/index.modern.js",
