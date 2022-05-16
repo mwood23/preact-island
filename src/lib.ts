@@ -98,10 +98,6 @@ export const generateHostElementProps = <P extends InitialProps>(
   }
 }
 
-/**
- * Return array of 0 or more elements that will host our widget
- * @return {Array}        Array of matching habitats
- */
 export const getHostElements = ({
   selector,
   inline,

@@ -8,25 +8,25 @@ const Widget = (props: any) => {
 }
 
 it('should render at the given selector', async () => {
-  const r = render(<div data-widget-host="island"></div>)
+  const r = render(<div data-island="island"></div>)
 
   await waitFor(() => expect(r.queryByTestId('widget')).not.toBeInTheDocument())
 
   const island = createIsland(Widget)
   island.render({
-    selector: '[data-widget-host="island"]',
+    selector: '[data-island="island"]',
   })
 
   await waitFor(() =>
     expect(r.container).toMatchInlineSnapshot(`
       <div>
         <div
-          data-widget-host="island"
+          data-island="island"
         >
           <div
             data-testid="widget"
           >
-            {"widgetHost":"island"}
+            {"island":"island"}
           </div>
         </div>
       </div>
@@ -62,17 +62,17 @@ island.render({
 it('should render using the data-mount-in prop and take priority over a selector if passed', async () => {
   const r = render(
     <div data-testid="parent-node">
-      <div data-testid="selector" data-widget-host="selector"></div>
+      <div data-testid="selector" data-island="selector"></div>
       <div
         data-testid="inlineScriptMountIn"
-        data-widget-host="inlineScriptMountIn"
+        data-island="inlineScriptMountIn"
       ></div>
       <InlineScript
         widget={Widget}
-        data-mount-in={`[data-widget-host="inlineScriptMountIn"]`}
+        data-mount-in={`[data-island="inlineScriptMountIn"]`}
         renderCode={`
 island.render({
-  selector: '[data-widget-host="island"]'
+  selector: '[data-island="island"]'
 })
   `}
       />
@@ -93,7 +93,7 @@ island.render({
 })
 
 it('should pass down default props', async () => {
-  const r = render(<div data-widget-host="island"></div>)
+  const r = render(<div data-island="island"></div>)
   const initialProps = {
     apples: 'yes',
     bananas: 1,
@@ -102,13 +102,13 @@ it('should pass down default props', async () => {
 
   const island = createIsland(Widget)
   island.render({
-    selector: '[data-widget-host="island"]',
+    selector: '[data-island="island"]',
     initialProps,
   })
 
   await waitFor(() =>
     expect(r.getByTestId('widget').innerHTML).toEqual(
-      JSON.stringify({ ...initialProps, widgetHost: 'island' }),
+      JSON.stringify({ ...initialProps, island: 'island' }),
     ),
   )
 })
@@ -116,8 +116,8 @@ it('should pass down default props', async () => {
 it('should render twice if multiple nodes are found from the selector', async () => {
   const r = render(
     <div>
-      <div data-widget-host="island"></div>
-      <div data-widget-host="island"></div>
+      <div data-island="island"></div>
+      <div data-island="island"></div>
     </div>,
   )
   const initialProps = {
@@ -128,33 +128,33 @@ it('should render twice if multiple nodes are found from the selector', async ()
 
   const island = createIsland(Widget)
   island.render({
-    selector: '[data-widget-host="island"]',
+    selector: '[data-island="island"]',
     initialProps,
   })
 
   // NOTE: Notice there is a different between this one and the other test.
-  // This one render inside of two data-widget-host elements whereas the other
+  // This one render inside of two data-island elements whereas the other
   // renders twice inside of the same data widget host element!
   await waitFor(() =>
     expect(r.container).toMatchInlineSnapshot(`
       <div>
         <div>
           <div
-            data-widget-host="island"
+            data-island="island"
           >
             <div
               data-testid="widget"
             >
-              {"apples":"yes","bananas":1,"kiwis":true,"widgetHost":"island"}
+              {"apples":"yes","bananas":1,"kiwis":true,"island":"island"}
             </div>
           </div>
           <div
-            data-widget-host="island"
+            data-island="island"
           >
             <div
               data-testid="widget"
             >
-              {"apples":"yes","bananas":1,"kiwis":true,"widgetHost":"island"}
+              {"apples":"yes","bananas":1,"kiwis":true,"island":"island"}
             </div>
           </div>
         </div>
@@ -164,7 +164,7 @@ it('should render twice if multiple nodes are found from the selector', async ()
 })
 
 it('should render multiple times if render is called twice', async () => {
-  const r = render(<div data-widget-host="island"></div>)
+  const r = render(<div data-island="island"></div>)
   const initialProps = {
     apples: 'yes',
     bananas: 1,
@@ -173,11 +173,11 @@ it('should render multiple times if render is called twice', async () => {
 
   const island = createIsland(Widget)
   island.render({
-    selector: '[data-widget-host="island"]',
+    selector: '[data-island="island"]',
     initialProps,
   })
   island.render({
-    selector: '[data-widget-host="island"]',
+    selector: '[data-island="island"]',
     initialProps,
   })
 
@@ -185,17 +185,17 @@ it('should render multiple times if render is called twice', async () => {
     expect(r.container).toMatchInlineSnapshot(`
       <div>
         <div
-          data-widget-host="island"
+          data-island="island"
         >
           <div
             data-testid="widget"
           >
-            {"apples":"yes","bananas":1,"kiwis":true,"widgetHost":"island"}
+            {"apples":"yes","bananas":1,"kiwis":true,"island":"island"}
           </div>
           <div
             data-testid="widget"
           >
-            {"apples":"yes","bananas":1,"kiwis":true,"widgetHost":"island"}
+            {"apples":"yes","bananas":1,"kiwis":true,"island":"island"}
           </div>
         </div>
       </div>
@@ -204,11 +204,11 @@ it('should render multiple times if render is called twice', async () => {
 })
 
 it('should replace the node at given selector if prop is given', async () => {
-  const r = render(<div data-widget-host="island"></div>)
+  const r = render(<div data-island="island"></div>)
 
   const island = createIsland(Widget)
   island.render({
-    selector: '[data-widget-host="island"]',
+    selector: '[data-island="island"]',
     replace: true,
   })
 
@@ -218,7 +218,7 @@ it('should replace the node at given selector if prop is given', async () => {
         <div
           data-testid="widget"
         >
-          {"widgetHost":"island"}
+          {"island":"island"}
         </div>
       </div>
     `),
@@ -226,23 +226,23 @@ it('should replace the node at given selector if prop is given', async () => {
 })
 
 it('should destroy mounted islands when destroy called', async () => {
-  const r = render(<div data-widget-host="island"></div>)
+  const r = render(<div data-island="island"></div>)
 
   const island = createIsland(Widget)
   island.render({
-    selector: '[data-widget-host="island"]',
+    selector: '[data-island="island"]',
   })
 
   await waitFor(() =>
     expect(r.container).toMatchInlineSnapshot(`
       <div>
         <div
-          data-widget-host="island"
+          data-island="island"
         >
           <div
             data-testid="widget"
           >
-            {"widgetHost":"island"}
+            {"island":"island"}
           </div>
         </div>
       </div>
@@ -255,7 +255,7 @@ it('should destroy mounted islands when destroy called', async () => {
     expect(r.container).toMatchInlineSnapshot(`
       <div>
         <div
-          data-widget-host="island"
+          data-island="island"
         />
       </div>
     `),
@@ -263,11 +263,11 @@ it('should destroy mounted islands when destroy called', async () => {
 })
 
 it('should destroy mounted islands when destroy called with replace: true', async () => {
-  const r = render(<div data-widget-host="island"></div>)
+  const r = render(<div data-island="island"></div>)
 
   const island = createIsland(Widget)
   island.render({
-    selector: '[data-widget-host="island"]',
+    selector: '[data-island="island"]',
     replace: true,
   })
 
@@ -277,7 +277,7 @@ it('should destroy mounted islands when destroy called with replace: true', asyn
         <div
           data-testid="widget"
         >
-          {"widgetHost":"island"}
+          {"island":"island"}
         </div>
       </div>
     `),

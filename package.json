@@ -1,14 +1,15 @@
 {
-  "name": "preact-lego",
+  "name": "preact-island",
   "version": "0.1.0",
   "type": "module",
-  "description": "Delightfully easy habitats using Preact",
+  "description": "Delightfully easy widgets that run anywhere using Preact",
   "source": "src/index.ts",
   "main": "./dist/index.cjs",
   "exports": "./dist/index.modern.js",
   "module": "./dist/index.module.js",
   "unpkg": "./dist/index.umd.js",
   "scripts": {
+    "build:netlify": "npm run build && cd ./example && npm run build",
     "build": "microbundle --sourcemap false",
     "dev:lib": "microbundle watch",
     "dev:example": "cd example && npm run dev",
@@ -17,19 +18,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mwood23/preact-lego.git"
+    "url": "git+https://github.com/mwood23/preact-island.git"
   },
   "keywords": [
     "preact",
     "habitat",
-    "shopify"
+    "shopify",
+    "cms widgets"
   ],
   "author": "Marcus Wood",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mwood23/preact-lego/issues"
+    "url": "https://github.com/mwood23/preact-island/issues"
   },
-  "homepage": "https://github.com/mwood23/preact-lego#readme",
+  "homepage": "https://github.com/mwood23/preact-island#readme",
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
     "extends": [

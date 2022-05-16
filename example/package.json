@@ -1,0 +1,28 @@
+{
+  "name": "preact-island-examples",
+  "version": "0.1.0",
+  "description": "",
+  "source": "src/index.tsx",
+  "main": "dist/index.js",
+  "module": "dist/index.module.js",
+  "umd:main": "dist/index.umd.js",
+  "scripts": {
+    "dev": "preact watch --template src/template.html --no-sw --port 3535",
+    "build": "npm run build:static && npm run build:islands",
+    "build:islands": "microbundle src/*.island.tsx build --no-sourcemap --output dist/snippets --external none --css inline --tsconfig tsconfig.json",
+    "build:static": "NODE_ENV=production preact build --template src/template.html --no-sw --prerender=false --esm=false --dest=dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "preact": "*"
+  },
+  "devDependencies": {
+    "clsx": "^1.1.1",
+    "preact-render-to-string": "^5.1.12",
+    "preact-cli": "^3.3.5",
+    "microbundle": "^0.15.0"
+  }
+}

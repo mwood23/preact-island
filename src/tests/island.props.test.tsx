@@ -29,7 +29,7 @@ it('should render at the given selector and trigger a rerender (not remount) whe
   const user = userEvent.setup()
   const r = render(
     <div
-      data-widget-host="island"
+      data-island="island"
       data-testid="island-host"
       data-prop-test="bananas"
     ></div>,
@@ -37,12 +37,12 @@ it('should render at the given selector and trigger a rerender (not remount) whe
 
   const island = createIsland(Widget)
   island.render({
-    selector: '[data-widget-host="island"]',
+    selector: '[data-island="island"]',
   })
 
   await waitFor(() =>
     expect(r.getByTestId('widgetProps').textContent).toEqual(
-      '{"widgetHost":"island","testid":"island-host","test":"bananas"}',
+      '{"island":"island","testid":"island-host","test":"bananas"}',
     ),
   )
 
@@ -62,7 +62,7 @@ it('should render at the given selector and trigger a rerender (not remount) whe
   await waitFor(() => expect(r.getByTestId('toggled')).toBeInTheDocument())
   await waitFor(() =>
     expect(r.getByTestId('widgetProps').textContent).toEqual(
-      '{"widgetHost":"island","testid":"island-host","test":"apples"}',
+      '{"island":"island","testid":"island-host","test":"apples"}',
     ),
   )
 })
@@ -71,7 +71,7 @@ it('should render at the given selector and trigger a rerender (not remount) whe
   const user = userEvent.setup()
   const r = render(
     <div
-      data-widget-host="island"
+      data-island="island"
       data-testid="island-host"
       data-prop-test="bananas"
     ></div>,
@@ -79,12 +79,12 @@ it('should render at the given selector and trigger a rerender (not remount) whe
 
   const island = createIsland(Widget)
   island.render({
-    selector: '[data-widget-host="island"]',
+    selector: '[data-island="island"]',
   })
 
   await waitFor(() =>
     expect(r.getByTestId('widgetProps').textContent).toEqual(
-      '{"widgetHost":"island","testid":"island-host","test":"bananas"}',
+      '{"island":"island","testid":"island-host","test":"bananas"}',
     ),
   )
 
@@ -103,7 +103,7 @@ it('should render at the given selector and trigger a rerender (not remount) whe
   await waitFor(() => expect(r.getByTestId('toggled')).toBeInTheDocument())
   await waitFor(() =>
     expect(r.getByTestId('widgetProps').textContent).toEqual(
-      '{"widgetHost":"island","testid":"island-host","test":"apples"}',
+      '{"island":"island","testid":"island-host","test":"apples"}',
     ),
   )
 })
@@ -111,7 +111,7 @@ it('should render at the given selector and trigger a rerender (not remount) whe
 it('should render at the given selector and trigger a rerender (not remount) when new props are passed to the child script props tag', async () => {
   const user = userEvent.setup()
   const r = render(
-    <div data-widget-host="island" data-testid="island-host">
+    <div data-island="island" data-testid="island-host">
       <script type="application/json" data-testid="script-props">
         {'{"test": "bananas"}'}
       </script>
@@ -120,12 +120,12 @@ it('should render at the given selector and trigger a rerender (not remount) whe
 
   const island = createIsland(Widget)
   island.render({
-    selector: '[data-widget-host="island"]',
+    selector: '[data-island="island"]',
   })
 
   await waitFor(() =>
     expect(r.getByTestId('widgetProps').textContent).toEqual(
-      '{"widgetHost":"island","testid":"island-host","test":"bananas"}',
+      '{"island":"island","testid":"island-host","test":"bananas"}',
     ),
   )
 
@@ -145,7 +145,7 @@ it('should render at the given selector and trigger a rerender (not remount) whe
   await waitFor(() => expect(r.getByTestId('toggled')).toBeInTheDocument())
   await waitFor(() =>
     expect(r.getByTestId('widgetProps').textContent).toEqual(
-      '{"widgetHost":"island","testid":"island-host","test":"apples"}',
+      '{"island":"island","testid":"island-host","test":"apples"}',
     ),
   )
 })
@@ -154,7 +154,7 @@ it('should render at the given selector and trigger a rerender (not remount) whe
   const user = userEvent.setup()
   const r = render(
     <div>
-      <div data-widget-host="island" data-testid="island-host"></div>
+      <div data-island="island" data-testid="island-host"></div>
       <script
         type="application/json"
         data-island-props="test-island"
@@ -167,13 +167,13 @@ it('should render at the given selector and trigger a rerender (not remount) whe
 
   const island = createIsland(Widget)
   island.render({
-    selector: '[data-widget-host="island"]',
+    selector: '[data-island="island"]',
     propsSelector: '[data-island-props="test-island"]',
   })
 
   await waitFor(() =>
     expect(r.getByTestId('widgetProps').textContent).toEqual(
-      '{"widgetHost":"island","testid":"island-host","test":"bananas"}',
+      '{"island":"island","testid":"island-host","test":"bananas"}',
     ),
   )
 
@@ -193,7 +193,7 @@ it('should render at the given selector and trigger a rerender (not remount) whe
   await waitFor(() => expect(r.getByTestId('toggled')).toBeInTheDocument())
   await waitFor(() =>
     expect(r.getByTestId('widgetProps').textContent).toEqual(
-      '{"widgetHost":"island","testid":"island-host","test":"apples"}',
+      '{"island":"island","testid":"island-host","test":"apples"}',
     ),
   )
 })
@@ -202,13 +202,13 @@ it('should render at the given selector and trigger a rerender (not remount) whe
   const user = userEvent.setup()
   const r = render(
     <div>
-      <div data-widget-host="island" data-testid="island-host"></div>
+      <div data-island="island" data-testid="island-host"></div>
       <InlineScript
         widget={Widget}
         data-prop-test="bananas"
         renderCode={`
 island.render({
-  selector: '[data-widget-host="island"]',
+  selector: '[data-island="island"]',
   })
         `}
         id="inline-script"
@@ -218,7 +218,7 @@ island.render({
 
   await waitFor(() =>
     expect(r.getByTestId('widgetProps').textContent).toEqual(
-      '{"widgetHost":"island","testid":"island-host","test":"bananas"}',
+      '{"island":"island","testid":"island-host","test":"bananas"}',
     ),
   )
 
@@ -238,7 +238,7 @@ island.render({
   await waitFor(() => expect(r.getByTestId('toggled')).toBeInTheDocument())
   await waitFor(() =>
     expect(r.getByTestId('widgetProps').textContent).toEqual(
-      '{"widgetHost":"island","testid":"island-host","test":"apples"}',
+      '{"island":"island","testid":"island-host","test":"apples"}',
     ),
   )
 })
