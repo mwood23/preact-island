@@ -14,14 +14,14 @@
 
 Sometimes you need to embed a component onto someone else's website. This could be an Shopify widget, email sign up form, CMS comment list, social media share icon, etc. Creating these experiences are tedious and difficult because you aren't in control of the website your code will be executed on.
 
-Preact Island helps you build these experiences by adding a lightweight layer on top of Preact. For <5kB, you get a React style workflow (with hooks!), and a framework for rendering your widget that will rerender based on prop changes anywhere in the document.
+Preact Island helps you build these experiences by adding a lightweight layer on top of Preact. For <5kB, you get a React style workflow (with hooks!), and a framework for rendering your widget with reactive props.
 
 ## Features
 
-- 🚀 Render by selector, inline, or by a selector given on the executed script
+- 🚀 Render by selector, inline, or by a specific attribute given on the executed script
 - ⚛️ Based on Preact, no special compiler or anything needed to render an island
 - 🙏 5 ways to pass in props to your component
-- 🪄 Prop changes sync to all components causing rerenders (not remounts)
+- 🪄 All components are reactive to prop changes (not remounts)
 - 👯‍♀️ Create as many instances of your component as you need with a single island
 - 🧼 Does not mutate the `window`. Use as many islands as you'd like on one page!
 - 🐣 Less than 1.3kB
@@ -35,14 +35,15 @@ Preact Island helps you build these experiences by adding a lightweight layer on
 - [Basic element placement with props](https://codesandbox.io/s/preact-island-element-placement-with-props-8kzmj5)
 - [Reactive props](https://codesandbox.io/s/reactive-prop-updates-uqvof7)
 - [Multiple islands](https://codesandbox.io/s/multiple-islands-8xvjqw)
-- [Props Script](https://codesandbox.io/s/props-selector-70ks1g)
+- [Props script](https://codesandbox.io/s/props-selector-70ks1g)
 - [Replace Selector](https://codesandbox.io/s/replace-selector-z2rogw)
-- [Multiple Host Elements](https://codesandbox.io/s/multiple-host-elements-q6ot5q)
-- [Clean Host Element](https://codesandbox.io/s/clean-host-element-i35nlt)
-- [Global Island](https://codesandbox.io/s/global-island-zqco9p)
-- [Inline Script](https://codesandbox.io/s/inline-script-1qm5q8)
-- [Current Script Props](https://codesandbox.io/s/preact-island-element-placement-current-script-props-0dwlyo)
-- [Interior Script Props](https://codesandbox.io/s/interior-script-props-z5rcxg)
+- [Multiple host elements](https://codesandbox.io/s/multiple-host-elements-q6ot5q)
+- [Clean host element](https://codesandbox.io/s/clean-host-element-i35nlt)
+- [Global island](https://codesandbox.io/s/global-island-zqco9p)
+- [Inline script](https://codesandbox.io/s/inline-script-1qm5q8)
+- [Current script props](https://codesandbox.io/s/preact-island-element-placement-current-script-props-0dwlyo)
+- [Interior script props](https://codesandbox.io/s/interior-script-props-z5rcxg)
+- [Mount In script attribute](https://codesandbox.io/s/mount-in-property-z5rcxg)
 
 ## Installation
 
@@ -202,6 +203,31 @@ Destroys all instances of the island on the page and disconnects any associated 
 const island = createIsland(Widget)
 island.render({ selector: '[data-island="widget"]' })
 island.destroy()
+```
+
+## Selecting Mount Point from Script
+
+You can override the `selector` given to render by passing `data-mount-in` to the script.
+
+[Example](https://codesandbox.io/s/mount-in-property-z5rcxg)
+
+```html
+<div data-island="pokemon">
+  <script type="text/props">
+    {"pokemon": "3"}
+  </script>
+</div>
+<h2>Special mount</h2>
+<!-- This takes priority over the other placement -->
+<!-- Props are scoped to placement so that's why -->
+<!-- Venosaur doesn't appear -->
+<div data-island="mount-here-actually"></div>
+
+<script
+  async
+  data-mount-in='[data-island="mount-here-actually"]'
+  src="https://preact-island.netlify.app/islands/pokemon.island.umd.js"
+></script>
 ```
 
 ## Passing Props
