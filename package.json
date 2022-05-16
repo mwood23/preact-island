@@ -9,7 +9,7 @@
   "module": "./dist/index.module.js",
   "unpkg": "./dist/index.umd.js",
   "scripts": {
-    "build:netlify": "npm run build && cd ./example && npm run build",
+    "build:netlify": "npm run build && cd ./example && npm install && npm run build",
     "build": "microbundle --sourcemap false",
     "dev:lib": "microbundle watch",
     "dev:example": "cd example && npm run dev",
