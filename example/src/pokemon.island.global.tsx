@@ -6,6 +6,6 @@ import { injectCSS } from './utils'
 injectCSS(style)
 
 const island = createIsland(Pokemon)
-island.render({
-  selector: '[data-island="pokemon"]',
-})
+
+// @ts-ignore
+window._pokemon = island

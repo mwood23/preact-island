@@ -54,5 +54,4 @@ const Widget = ({
 const island = createIsland(Widget)
 island.render({
   selector: '[data-island="email-subscribe"]',
-  clean: true,
 })

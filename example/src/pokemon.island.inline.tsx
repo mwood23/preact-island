@@ -7,5 +7,5 @@ injectCSS(style)
 
 const island = createIsland(Pokemon)
 island.render({
-  selector: '[data-island="pokemon"]',
+  inline: true,
 })

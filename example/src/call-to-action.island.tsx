@@ -50,5 +50,4 @@ const Widget = ({ backgroundColor }: { backgroundColor?: string }) => {
 const island = createIsland(Widget)
 island.render({
   selector: '[data-island="call-to-action"]',
-  clean: true,
 })

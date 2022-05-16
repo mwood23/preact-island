@@ -8,6 +8,7 @@
   "exports": "./dist/index.modern.js",
   "module": "./dist/index.module.js",
   "unpkg": "./dist/index.umd.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build:netlify": "npm run build && cd ./example && npm install && npm run build",
     "build": "microbundle --sourcemap false",
