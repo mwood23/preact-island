@@ -1,6 +1,6 @@
 {
   "name": "preact-island",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "description": "🏝 Create your own slice of paradise on any website.",
   "source": "src/index.ts",
