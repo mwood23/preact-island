@@ -47,6 +47,8 @@ Preact Island helps you build these experiences by adding a lightweight layer on
 - [Executed script props](https://codesandbox.io/s/preact-island-element-placement-current-script-props-0dwlyo)
 - [Interior script props](https://codesandbox.io/s/interior-script-props-z5rcxg)
 - [Mount In script attribute](https://codesandbox.io/s/mount-in-property-z5rcxg)
+- [React with Props](https://codesandbox.io/s/preact-island-element-placement-with-props-react-49mjrg)
+- [React Portals with Preact Island](https://codesandbox.io/s/preact-island-element-placement-with-props-react-tdss2p)
 
 ## Installation
 
@@ -368,6 +370,9 @@ multiple interior script props are found, all props are merged with the last scr
 ```
 
 ## React Compatibility
+
+- [React with Props](https://codesandbox.io/s/preact-island-element-placement-with-props-react-49mjrg)
+- [React Portals with Preact Island](https://codesandbox.io/s/preact-island-element-placement-with-props-react-tdss2p)
 
 Preact Island fully supports React using [preact/compat](https://preactjs.com/guide/v10/switching-to-preact). This allows you to bring your existing React components over to Preact to get great performance gains without needing to rewrite your components. Check out the `example-react` folder to a demo repo that reproduces some of the Preact islands as React islands.
 
