@@ -1,0 +1,17 @@
+.pokemon__container {
+  border-radius: 5px;
+  border: 1px solid #eae7e7;
+  padding: 1rem;
+  display: inline-block;
+}
+
+.pokemon__image {
+  width: 200px;
+  height: 200px;
+  text-align: center;
+}
+
+.pokemon__info {
+  color: #2b2e34;
+  margin-bottom: 5px;
+}

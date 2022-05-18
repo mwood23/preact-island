@@ -192,12 +192,12 @@ export const watchForPropChanges = <P extends InitialProps>({
   }
 
   getInteriorPropsScriptsForElement(hostElement).forEach((script) => {
-    observer.observe(script, config)
+    observer.observe(script, { ...config, subtree: true })
   })
 
   if (propsSelector) {
     getPropsScriptsBySelector(propsSelector).forEach((script) => {
-      observer.observe(script, config)
+      observer.observe(script, { ...config, subtree: true })
     })
   }
 

@@ -367,6 +367,26 @@ multiple interior script props are found, all props are merged with the last scr
 ></script>
 ```
 
+## React Compatibility
+
+Preact Island fully supports React using [preact/compat](https://preactjs.com/guide/v10/switching-to-preact). This allows you to bring your existing React components over to Preact to get great performance gains without needing to rewrite your components. Check out the `example-react` folder to a demo repo that reproduces some of the Preact islands as React islands.
+
+Depending on what you import from React, using Preact + Preact Island can result in a **15x smaller bundle** for the same functionality and no code changes needed on your end.
+
+### Bundle Sizes
+
+#### React
+
+![react only](./docs/bundle-react-only.png)
+
+#### React + Preact/compat
+
+![react with preact/compat](./docs/bundle-react-with-compat.png)
+
+#### Preact
+
+![preact](./docs/bundle-preact.png)
+
 ## Adding Styles
 
 You can add styles to your island just like any other component. If you're island will be running on someone else's website be mindful of the global CSS scope! Preact Island does not render into the shadow dom (yet) so your styles will impact the entire page. Prefix all of your classes with a name `island__` or use CSS modules to make sure those styles don't leak. Do not use element selectors like `p` or `h2`.
