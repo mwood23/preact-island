@@ -28,7 +28,7 @@ Preact Island helps you build these experiences by adding a lightweight layer on
 - 🧼 Does not mutate the `window`. Use as many islands as you'd like on one page!
 - 🐣 Less than 1.3kB
 - ☠️ Supports replacing the target selector
-- 🏔 React friendly with `preact-compat`
+- 🏔 React friendly with `preact/compat`
 - 🔧 Manually trigger rerenders with props
 - 🐙 Fully tested with Preact testing library
 - 👔 Fully typed with TypeScript
