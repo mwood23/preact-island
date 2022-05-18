@@ -1,0 +1,57 @@
+.cta_button {
+  background-color: none;
+  border: none;
+  background-color: #294eab;
+  border-radius: 5px;
+  padding: 10px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.cta__modal-dimmer {
+  position: fixed;
+  display: none;
+  z-index: 90;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.cta__modal-dimmer--visible {
+  display: block;
+  animation: show 0.2s;
+  animation-fill-mode: forwards;
+}
+
+.cta__modal {
+  position: fixed;
+  outline: none;
+  z-index: 100;
+  background-color: white;
+  display: none !important;
+  width: 380px;
+  border-radius: 24px;
+  padding: 34px 21px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: inherit;
+  overflow-y: auto;
+  height: 650px;
+  text-align: center;
+}
+
+.cta__modal--visible {
+  display: block !important;
+  animation: show 0.3s;
+  animation-fill-mode: forwards;
+}
+
+.cta__modal img {
+  width: 100%;
+  margin-bottom: 1rem;
+}

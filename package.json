@@ -1,6 +1,6 @@
 {
   "name": "preact-island",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "description": "🏝 Create your own slice of paradise on any website.",
   "source": "src/index.ts",
@@ -11,6 +11,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build:netlify": "npm run build && cd ./example && npm install && npm run build",
+    "build:netlify:react": "npm run build && cd ./example-react && npm install && npm run build",
     "build": "microbundle --sourcemap false",
     "dev:lib": "microbundle watch",
     "dev:example": "cd example && npm run dev",
