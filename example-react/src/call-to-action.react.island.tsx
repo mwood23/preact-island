@@ -1,4 +1,4 @@
-import { createIsland } from '../../dist/index.module'
+import { createIsland } from '../../src'
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import style from './call-to-action.island.css'

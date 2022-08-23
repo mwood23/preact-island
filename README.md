@@ -23,6 +23,7 @@ Preact Island helps you build these experiences by adding a lightweight layer on
 - 🚀 Render by selector, inline, or by a specific attribute given on the executed script
 - ⚛️ Based on Preact, no special compiler or anything needed to render an island
 - 🙏 5 ways to pass in props to your component
+- 🧩 Experimental support for web components (including web component portals)
 - 🪄 All components are reactive to prop changes causing rerenders (not remounts)
 - 👯‍♀️ Create as many instances of your component as you need with a single island
 - 🧼 Does not mutate the `window`. Use as many islands as you'd like on one page!
@@ -59,7 +60,6 @@ npm install --save preact-island
 ## Usage
 
 ```tsx
-import { h } from 'preact'
 import { createIsland } from 'preact-island'
 
 const Widget = () => {
@@ -265,7 +265,6 @@ Default props can be passed on render to an island. You can render many islands 
 do not cause rerenders if updated. Use `createIsland.rerender` instead.
 
 ```ts
-import { h } from 'preact'
 import { createIsland } from 'preact-island'
 
 const Widget = () => {
@@ -394,7 +393,7 @@ Depending on what you import from React, using Preact + Preact Island can result
 
 ## Adding Styles
 
-You can add styles to your island just like any other component. If you're island will be running on someone else's website be mindful of the global CSS scope! Preact Island does not render into the shadow dom (yet) so your styles will impact the entire page. Prefix all of your classes with a name `island__` or use CSS modules to make sure those styles don't leak. Do not use element selectors like `p` or `h2`.
+You can add styles to your island just like any other component. If you're island will be running on someone else's website be mindful of the global CSS scope! Prefix all of your classes with a name `island__` or use CSS modules to make sure those styles don't leak. Do not use element selectors like `p` or `h2`.
 
 ### Including Styles
 
@@ -405,8 +404,7 @@ Preact Island takes no opinions on how CSS is included for your islands. There a
 This is what the `/example` islands do.
 
 ```tsx
-import { createIsland } from '../../dist/index.module'
-import { h } from 'preact'
+import { createIsland } from 'preact-island'
 import style from './email-subscribe.island.css'
 
 document.head.insertAdjacentHTML('beforeend', `<style>${style}</style>`)
@@ -471,11 +469,11 @@ island.render({
 
 It's not recommending to use CSS libraries when developing islands since they're meant to be small and ran everywhere. Some libraries come with opinionated CSS resets and other global CSS styles that could break the consuming website of your island. They are also going to be large.
 
-If you need a CSS library, use something that has a just in time compilation step like [Tailwind](https://tailwindcss.com/docs/installation) to minimize the excess CSS.
+If you need a CSS library, use something that has a just in time compilation step like [Tailwind](https://tailwindcss.com/docs/installation) to minimize the excess CSS. Or you can use something like [Vanilla-Extract](https://vanilla-extract.style/) to build your own zero runtime cost Tailwind.
 
 ## Building Your Islands
 
-Any modern bundler will work with Preact Island. If you are looking for a script that will run on a webpage you need the `UMD` format. The `/example` project has a demo setup using `microbundle`, a bundler by the same author as Preact. It works extremely well if you have multiple islands because it can produce multi-entry point bundles.
+Any modern bundler will work with Preact Island. If you are looking for a script that will run on a webpage you need the `UMD` format. The `/example` project has a demo setup using `webpack`. It works extremely well if you have multiple islands because it can produce multi-entry point bundles.
 
 ### Naming Conventions
 
@@ -484,6 +482,8 @@ Make sure to name your bundles `kebab-case` since they'll be served over HTTP. C
 ## Hosting Your Islands
 
 You can host your files on anywhere you would typically host websites. Vercel, Cloudflare Workers, and Netlify all work great. Netlify recently [changed their prices](https://answers.netlify.com/t/upcoming-changes-to-netlify-plans/52482/158) causing it to be prohibitively expensive depending on your team size.
+
+> Make sure to use your own domain when hosting these assets. If you use their subdomain like `something.mynetlify.com` and embed those onto third party websites you may get locked in.
 
 ## The Callsite for Your Island
 
@@ -527,8 +527,6 @@ Key differences:
 - [StencilJS](https://stenciljs.com/): A web components toolchain that feels sort of like React and Angular put together. The JSX core is lifted from Preact's internals. It has a lot of nice features like automatic documentation and other nice to haves since it has its own compiler. It feels tailored towards design system and doesn't have the flexibility of prop injection that Preact Island does. It's also another tool to adopt with it's own patterns. All you have to do with Preact Island is bring your component.
 - [Lit](https://lit.dev/docs/): A web components framework by Google. Does not require a compilation step and weights in around 5Kb (roughly the same as Preact Island + Preact). Doesn't use a virtual dom for diffing and feels like a nice layer on top of web components. Does not support JSX or a React style workflow.
 
-Preact Island does not leverage the shadow dom or custom elements API yet for building full fledged [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components). It may at some point in the future, but the scope of the project is to deliver the best React style API for delivering one of widgets onto any web page under 5kB.
-
 ## Credits
 
 A huge thank you to [zouhir](https://github.com/zouhir) who is the author of [preact-habitat](https://github.com/zouhir/preact-habitat). This library is heavily inspired by his work on that library.
@@ -538,8 +536,6 @@ Artwork by [vik4graphic](https://lottiefiles.com/vik4graphic)
 ## License
 
 [MIT](LICENSE) - Copyright (c) [Marcus Wood](https://www.marcuswood.io/)
-
-To add dynamic props to replace you can add a script in the document and pass in `data-props-for` or you can add props inline to the script placed on the page.
 
 [version-badge]: https://img.shields.io/npm/v/preact-island.svg?style=flat-square
 [package]: https://www.npmjs.com/package/preact-island
