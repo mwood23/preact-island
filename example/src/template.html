@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title><% preact.title %></title>
+    <title>Widgets</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -33,17 +33,16 @@
         color: rgba(0, 0, 0, 0.5);
       }
     </style>
-    <% preact.headEnd %>
   </head>
   <body>
-    <div data-island="call-to-action" class="preview"></div>
+    <div class="preview">
+      <call-to-action></call-to-action>
+    </div>
     <div data-island="email-subscribe" class="preview"></div>
     <div data-island="pokemon" class="preview">
       <script type="text/props">
         { "pokemon": "122" }
       </script>
     </div>
-
-    <% preact.bodyEnd %>
   </body>
 </html>

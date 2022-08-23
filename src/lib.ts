@@ -1,7 +1,15 @@
 import { ComponentType, h, render } from 'preact'
 import { InitialProps, Island } from './island'
 
-type HostElement = HTMLElement
+type HostElement = HTMLElement | ShadowRoot
+
+export const isInShadow = (node: HostElement | HTMLOrSVGScriptElement) => {
+  return node.getRootNode() instanceof ShadowRoot
+}
+
+export const isShadowRoot = (x: unknown): x is ShadowRoot => {
+  return x instanceof ShadowRoot
+}
 
 export const formatProp = (str: string) => {
   return `${str.charAt(0).toLowerCase()}${str.slice(1)}`
@@ -10,7 +18,13 @@ export const formatProp = (str: string) => {
 export const getPropsFromElement = (
   element: HostElement | HTMLOrSVGScriptElement,
 ) => {
-  const { dataset } = element
+  // In a shadow dom we replace the host element because it's within the shadow root. However,
+  // we want the props of the autonomous custom element.
+  const targetElement = isInShadow(element)
+    ? (element.getRootNode() as any).host
+    : element
+
+  const { dataset } = targetElement
 
   const props: { [x: string]: any } = {}
 
@@ -38,7 +52,11 @@ export const isValidPropsScript = (element: Element) => {
   )
 }
 
-export const getInteriorPropsScriptsForElement = (element: HTMLElement) => {
+export const getInteriorPropsScriptsForElement = (element: HostElement) => {
+  // getElementsByTagName does not exist on shadow roots and within a shadow root
+  // the caller can't place in props scripts
+  if (isShadowRoot(element)) return []
+
   return Array.from(element.getElementsByTagName('script')).filter(
     isValidPropsScript,
   )
@@ -67,7 +85,7 @@ export const getPropsFromScripts = (scripts: HTMLOrSVGScriptElement[]) => {
 
 /**
  * Get the props from a host element's data attributes
- * @param  {Element} tag The host element
+ * @param  {Element} The host element
  * @return {Object}  props object to be passed to the component
  */
 export const generateHostElementProps = <P extends InitialProps>(
@@ -119,7 +137,9 @@ export const getHostElements = ({
   }
 
   if (selector) {
-    return Array.from(document.querySelectorAll<HTMLElement>(selector))
+    return Array.from(document.querySelectorAll<HTMLElement>(selector)).map(
+      (n) => (n.shadowRoot != null ? n.shadowRoot : n),
+    )
   }
 
   return []
@@ -136,10 +156,10 @@ export const getHostElements = ({
 export type RootFragment = any
 
 export function createRootFragment(
-  parent: HTMLElement,
-  replaceNode: HTMLElement | HTMLElement[],
+  parent: HostElement,
+  replaceNode: HostElement | HostElement[],
 ): RootFragment {
-  replaceNode = ([] as HTMLElement[]).concat(replaceNode)
+  replaceNode = ([] as HostElement[]).concat(replaceNode)
   var s = replaceNode[replaceNode.length - 1].nextSibling
   function insert(c: HTMLElement, r: HTMLElement) {
     parent.insertBefore(c, r || s)
@@ -201,7 +221,20 @@ export const watchForPropChanges = <P extends InitialProps>({
     })
   }
 
-  observer.observe(hostElement, config)
+  /**
+   * If the host element is a shadow root we want to observe on the host of it.
+   *
+   * Example:
+   * <preact-element data-prop-foo="bar">
+   *    #shadow-root (open)
+   * </preact-element>
+   *
+   * We want to observe the custom autonomous element, not the shadow root!
+   */
+  observer.observe(
+    isShadowRoot(hostElement) ? hostElement.host! : hostElement,
+    config,
+  )
 
   return observer
 }

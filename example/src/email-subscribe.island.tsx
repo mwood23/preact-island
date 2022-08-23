@@ -1,6 +1,5 @@
-import { createIsland } from '../../dist/index.module'
-import { Component, h } from 'preact'
-import { useEffect, useState } from 'preact/hooks'
+import { createIsland } from '../../src'
+import { useState } from 'preact/hooks'
 import { injectCSS } from './utils'
 import style from './email-subscribe.island.css'
 
@@ -9,6 +8,7 @@ injectCSS(style)
 const Widget = ({
   showEmail = true,
   showName = true,
+  ...rest
 }: {
   showEmail: boolean
   showName: boolean

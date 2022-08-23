@@ -11,6 +11,8 @@ import {
   watchForPropChanges,
   isValidPropsScript,
   renderIsland,
+  isInShadow,
+  isShadowRoot,
 } from '../../lib'
 import { h, FunctionComponent } from 'preact'
 
@@ -47,6 +49,8 @@ const createRootFragment = ${createRootFragment};
 const watchForPropChanges = ${watchForPropChanges};
 const isValidPropsScript = ${isValidPropsScript};
 const renderIsland = ${renderIsland};
+const isInShadow = ${isInShadow};
+const isShadowRoot = ${isShadowRoot};
 
 const _lib = {
   mount: ${mount},

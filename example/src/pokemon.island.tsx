@@ -1,4 +1,4 @@
-import { createIsland } from '../../dist/index.module'
+import { createIsland } from '../../src'
 import { Pokemon } from './pokemon.component'
 import style from './pokemon.island.css'
 import { injectCSS } from './utils'
