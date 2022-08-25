@@ -14,6 +14,8 @@
 
 </div>
 
+> 🚀 Looking for a zero config starter to build islands fast? Check out [preact-island-starter](https://github.com/mwood23/preact-island-starter)
+
 Sometimes you need to embed a component onto someone else's website. This could be a Shopify widget, email sign up form, CMS comment list, social media share icon, etc. Creating these experiences are tedious and difficult because you aren't in control of the website your code will be executed on.
 
 Preact Island helps you build these experiences by adding a lightweight layer on top of Preact. For <5kB, you get a React style workflow (with hooks!), and a framework for rendering your widget with reactive props.
