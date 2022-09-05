@@ -18,3 +18,7 @@ Thanks [@rschristian](https://github.com/rschristian)
 - Migrate examples over to webpack and off of Microbundle + Preact CLI. Now the deveopment server injects the scripts just like you would in production to give you the closest environment to.
 - Internal island lib now ships with support for the shadow dom (even if you don't want to use the build in island web components API)
 - Documentation updates
+
+## 1.1.1
+
+- Fixed bug where rendering a web component multiple times on a page would not function as expected. This was due to the custom element being defined twice causing everything to silently fail.

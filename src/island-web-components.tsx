@@ -15,16 +15,18 @@ export const createIslandWebComponent = <P extends InitialPropsWebComponent>(
    */
   widget: ComponentType<P>,
 ) => {
-  class Element extends HTMLElement {
-    constructor() {
-      super()
+  if (customElements.get(elementName) == null) {
+    class Element extends HTMLElement {
+      constructor() {
+        super()
 
-      // Create a shadow root
-      this.attachShadow({ mode: 'open' })
+        // Create a shadow root
+        this.attachShadow({ mode: 'open' })
+      }
     }
-  }
 
-  customElements.define(elementName, Element)
+    customElements.define(elementName, Element)
+  }
 
   const island = createIsland(widget)
 
@@ -52,35 +54,36 @@ export const WebComponentPortal: FC<{
   name: string
   container?: Element
   children: VNode<{}>
-  style?: string
+  style?: string | HTMLStyleElement
 }> = ({ name, container = document.body, children, style }) => {
   const portalTarget = useMemo(() => {
-    if (customElements.get(name) != null) {
-      const customElement = document.createElement(name)
-      return container.appendChild(customElement)
-    }
+    if (customElements.get(name) == null) {
+      class Element extends HTMLElement {
+        constructor() {
+          super()
 
-    class Element extends HTMLElement {
-      constructor() {
-        super()
+          // Create a shadow root
+          const shadowRoot = this.attachShadow({ mode: 'open' })
 
-        // Create a shadow root
-        const shadowRoot = this.attachShadow({ mode: 'open' })
+          if (!style) return
 
-        if (style) {
-          const styleElement = document.createElement('style')
-          styleElement.innerHTML = style
+          if (style instanceof HTMLStyleElement) {
+            shadowRoot.prepend(style)
+          } else {
+            const styleElement = document.createElement('style')
+            styleElement.innerHTML = style
 
-          shadowRoot.prepend(styleElement)
+            shadowRoot.prepend(styleElement)
+          }
         }
       }
-    }
 
-    customElements.define(name, Element)
+      customElements.define(name, Element)
+    }
 
     const customElement = document.createElement(name)
     return container.appendChild(customElement)
-  }, [container])
+  }, [container, style])
 
   useEffect(() => {
     return () => {
