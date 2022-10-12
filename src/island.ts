@@ -111,6 +111,11 @@ export type Island<P extends InitialProps> = {
      * the last script found taking priority.
      */
     propsSelector?: string
+
+    /**
+     * Passed in if using for web components
+     */
+    elementName?: string
   }) => void
 
   /**
@@ -143,6 +148,7 @@ export const createIsland = <P extends InitialProps>(
       inline = false,
       initialProps = {},
       propsSelector,
+      elementName,
     }) => {
       let rendered = false
 
@@ -155,6 +161,7 @@ export const createIsland = <P extends InitialProps>(
         const hostElements = getHostElements({
           selector,
           inline,
+          elementName,
         })
 
         // Do nothing if no host elements returned

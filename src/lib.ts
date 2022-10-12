@@ -119,9 +119,14 @@ export const generateHostElementProps = <P extends InitialProps>(
 export const getHostElements = ({
   selector,
   inline,
+  elementName,
 }: {
   selector?: string
   inline: boolean
+  /**
+   * Passed if targeting web components so that mount in can create web components inside of the host elements
+   */
+  elementName?: string
 }): HostElement[] => {
   const currentScript = document.currentScript
 
@@ -132,8 +137,19 @@ export const getHostElements = ({
 
   // Next, try to get the selector from the current script
   const maybeSelector = currentScript?.dataset.mountIn
+
   if (maybeSelector) {
-    return Array.from(document.querySelectorAll<HTMLElement>(maybeSelector))
+    return Array.from(
+      document.querySelectorAll<HTMLElement>(maybeSelector),
+    ).map((n) => {
+      if (elementName != null) {
+        const targetElement = document.createElement(elementName)
+        const node = n.appendChild(targetElement)
+        return node.shadowRoot != null ? node.shadowRoot : node
+      }
+
+      return n
+    })
   }
 
   if (selector) {

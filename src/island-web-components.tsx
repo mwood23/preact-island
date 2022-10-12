@@ -37,7 +37,7 @@ export const createIslandWebComponent = <P extends InitialPropsWebComponent>(
         Parameters<Island<P>['render']>[0],
         'replace' | 'clean' | 'inline'
       >,
-    ) => island.render(args),
+    ) => island.render({ elementName, ...args }),
     injectStyles: (style: string) => {
       island._roots.forEach((root) => {
         const styleElement = document.createElement('style')
