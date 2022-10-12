@@ -22,3 +22,7 @@ Thanks [@rschristian](https://github.com/rschristian)
 ## 1.1.1
 
 - Fixed bug where rendering a web component multiple times on a page would not function as expected. This was due to the custom element being defined twice causing everything to silently fail.
+
+## 1.1.2
+
+- Fixed bug where data-mount-in did not function with web components
