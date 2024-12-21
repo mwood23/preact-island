@@ -15,7 +15,7 @@ Thanks [@rschristian](https://github.com/rschristian)
 ## 1.1.0
 
 - 🧩 Experimental web component support including web component portals! This API may change drastically over time so if you use it keep that in mind. If you have ideas on how to improve it file an issue!
-- Migrate examples over to webpack and off of Microbundle + Preact CLI. Now the deveopment server injects the scripts just like you would in production to give you the closest environment to.
+- Migrate examples over to webpack and off of Microbundle + Preact CLI. Now the development server injects the scripts just like you would in production to give you the closest environment to.
 - Internal island lib now ships with support for the shadow dom (even if you don't want to use the build in island web components API)
 - Documentation updates
 
@@ -26,3 +26,7 @@ Thanks [@rschristian](https://github.com/rschristian)
 ## 1.1.2
 
 - Fixed bug where data-mount-in did not function with web components
+
+## 1.2.0
+
+- Fix package.json exports field
